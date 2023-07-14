@@ -1,3 +1,10 @@
+.DS_Store
+clean_data.csv
+data.csv
+append_data.csv
+error.txt
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
