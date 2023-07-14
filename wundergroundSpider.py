@@ -110,7 +110,7 @@ def cleanData(df0, reset_start_time_index, reset_end_time_index):
                     axis = 1) \
              .set_index(['time']) \
              .sort_index() \
-             .dropna(how = 'all', axis = 1) # 有些列全为空值
+             # .dropna(how = 'all', axis = 1) # 有些列全为空值
     
     # 华氏度转摄氏度
     df1['temp'] = df1['temp'].apply(lambda x: (x-32)/1.8) # 气温
@@ -127,10 +127,12 @@ def cleanData(df0, reset_start_time_index, reset_end_time_index):
                                    freq = '30min')
     df1 = df1.reindex(new_time_index, fill_value = np.nan).sort_index()
     df1.index.name = 'time'
-    df1 = df1.reset_index()
-    df1['date'] = df1['time'].dt.date
-    df1 = df1.drop(['time'], axis = 1)
 
+    '''
+    # 以下将逐30min数据计算为日均数据
+    # df1 = df1.reset_index()
+    # df1['date'] = df1['time'].dt.date
+    # df1 = df1.drop(['time'], axis = 1)
 
     # 根据紫外线指数从大于0的时间计算当天日照时数
     # 去掉 0 ，对剩余的进行计数，单位为半小时
@@ -193,7 +195,9 @@ def cleanData(df0, reset_start_time_index, reset_end_time_index):
     # 合并数据
     df2 = pd.concat([df_float64_1, df_object_mode], axis = 1, verify_integrity = True)
 
-    df2.to_csv('clean_data.csv', encoding = 'utf-8')
+    '''
+    
+    df1.to_csv('clean_data.csv', encoding = 'utf-8')
     
     return None
 
@@ -201,7 +205,7 @@ def cleanData(df0, reset_start_time_index, reset_end_time_index):
 if __name__ == '__main__':
     req_url = 'https://api.weather.com/v1/location/ZGGG:9:CN/observations/historical.json?apiKey=e1f10a1e78da46f5b10a1e78da96f525&units=e' # 广州白云机场
     start_date = '2022-01-01'
-    end_date = '2022-01-31'
+    end_date = '2022-01-10'
     sleep_time = 6 # 最好拉长睡眠时间，太短的时间（频繁请求）回被封掉ip地址，6秒以上差不多
 
 
