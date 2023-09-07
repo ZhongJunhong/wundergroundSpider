@@ -124,7 +124,7 @@ def cleanData(df0, reset_start_time_index, reset_end_time_index):
     # 重建时间索引，因部分时间索引丢失
     new_time_index = pd.date_range(start = reset_start_time_index,
                                    end = reset_end_time_index,
-                                   freq = '30min')
+                                   freq = 'H')
     df1 = df1.reindex(new_time_index, fill_value = np.nan).sort_index()
     df1.index.name = 'time'
 
@@ -194,11 +194,17 @@ def cleanData(df0, reset_start_time_index, reset_end_time_index):
 
     # 合并数据
     df2 = pd.concat([df_float64_1, df_object_mode], axis = 1, verify_integrity = True)
-
     '''
+
+    
+    # 得到的数据是逐半小时的，重置索引为逐小时
+    # new_index = pd.date_range('12/29/2009', periods = 10, freq = 'D')
+    # df1.reindex(new_index)
+
     
     df1.to_csv('clean_data.csv', encoding = 'utf-8')
-    
+    os.remove('data.csv')
+
     return None
 
 
@@ -221,5 +227,5 @@ if __name__ == '__main__':
     cleanData(
         concat_df,
         reset_start_time_index = start_date + ' 00:00:00',
-        reset_end_time_index = end_date + ' 23:30:00'
+        reset_end_time_index = end_date + ' 00:00:00'
         )
